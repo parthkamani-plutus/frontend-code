@@ -1,0 +1,137 @@
+<div class="animated fadeIn">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> States
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th (click)="changeOrderBy('name')">Name
+                  <i *ngIf="sortBy=='name' && orderBy=='ASC'" class="fa fa-sort-asc fa-lg mt-4"></i>
+                  <i *ngIf="sortBy=='name' && orderBy=='DESC'" class="fa fa-sort-desc fa-lg mt-4"></i>
+                </th>
+                <th (click)="changeOrderBy('abbreviation')">Abbreviation
+                  <i *ngIf="sortBy=='abbreviation' && orderBy=='ASC'" class="fa fa-sort-asc fa-lg mt-4"></i>
+                  <i *ngIf="sortBy=='abbreviation' && orderBy=='DESC'" class="fa fa-sort-desc fa-lg mt-4"></i>
+                </th>
+                <th (click)="changeOrderBy('capital')">Capital
+                  <i *ngIf="sortBy=='capital' && orderBy=='ASC'" class="fa fa-sort-asc fa-lg mt-4"></i>
+                  <i *ngIf="sortBy=='capital' && orderBy=='DESC'" class="fa fa-sort-desc fa-lg mt-4"></i>
+                </th>
+                <th (click)="changeOrderBy('most-populous-city')">Most Populous City
+                  <i *ngIf="sortBy=='most-populous-city' && orderBy=='ASC'" class="fa fa-sort-asc fa-lg mt-4"></i>
+                  <i *ngIf="sortBy=='most-populous-city' && orderBy=='DESC'" class="fa fa-sort-desc fa-lg mt-4"></i>
+                </th>
+                <th (click)="changeOrderBy('population')">Population
+                  <i *ngIf="sortBy=='population' && orderBy=='ASC'" class="fa fa-sort-asc fa-lg mt-4"></i>
+                  <i *ngIf="sortBy=='population' && orderBy=='DESC'" class="fa fa-sort-desc fa-lg mt-4"></i>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let state of stateList">
+
+                <td> <a href="javascript:void(0);" data-toggle="modal" (click)="getStateDetail(state)" [innerText]="state['name']"></a>                  </td>
+                <td [innerText]="state['abbreviation']"></td>
+                <td [innerText]="state['capital']"></td>
+                <td [innerText]="state['most-populous-city']"></td>
+                <td [innerText]="state['population']"></td>
+              </tr>
+            </tbody>
+
+          </table>
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="javascript:void(0)" (click)="gotoPreviousPage()">Prev</a></li>
+            <li *ngFor="let page of createRange()">
+              <a class="page-link" href="javascript:void(0)" (click)="loadData(page)" [innerText]="page"></a>
+            </li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0)" (click)="gotoNextPage()">Next</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+<div bsModal #myModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">State Detail</h4>
+        <button type="button" class="close" (click)="myModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- [readonly]="true" -->
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group col-sm-9">
+              <label for="city">Name</label>
+              <input type="text" class="form-control" id="city" [(ngModel)]="selectedStateDetail.name" placeholder="Name">
+            </div>
+            <div class="form-group col-sm-3">
+              <label for="postal-code">Abbreviation</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail.abbreviation" id="postal-code" placeholder="Abbreviation">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <label for="city">Capital</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail.abbreviation" id="city" placeholder="Capital">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="postal-code">Most Populous City</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail['most-populous-city']" id="postal-code" placeholder="Most Populous City">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <label for="city">Population</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail.population" id="city" placeholder="Population">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="postal-code">Square Miles</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail['square-miles']" id="postal-code" placeholder="Square Miles">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <label for="city">Time Zone 1</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail['time-zone-1']" id="city" placeholder="Time Zone 1">
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="postal-code">Time Zone 2</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedStateDetail['time-zone-2']" id="postal-code" placeholder="Time Zone 2">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <div class="checkbox">
+                <label for="checkbox1">
+                    <input type="checkbox" id="checkbox1" name="checkbox1" [checked]="selectedStateDetail.dst=='YES'?true:false" > Daylight Saving Time
+                  </label>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal.hide()">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
